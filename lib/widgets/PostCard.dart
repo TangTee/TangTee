@@ -84,22 +84,12 @@ class _PostCardState extends State<CardWidget> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final CollectionReference _post =
       FirebaseFirestore.instance.collection('post');
-  final CollectionReference _favorites =
-      FirebaseFirestore.instance.collection('favorites');
 
   Future<void> post_delete(String postid) async {
     await _post.doc(postid).delete();
 
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('You have successfully deleted a post activity')));
-  }
-
-  Future<void> _delete(String usersId) async {
-    await _favorites
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection('favorites list')
-        .doc(usersId)
-        .delete();
   }
 
   Widget build(BuildContext context) {
@@ -409,7 +399,7 @@ class _PostCardState extends State<CardWidget> {
                         fontSize: 20),
                   )),
                   onTap: () {
-                    Navigator.pop(context);
+                    return showModalBottomSheetRP(context, postData);
                   },
                 ),
               ListTile(

@@ -236,7 +236,7 @@ class _MyCommentState extends State<Comment> {
                                                                         context)
                                                                     .size
                                                                     .width *
-                                                                0.7,
+                                                                0.6,
                                                             child: Text(
                                                                 documentSnapshot[
                                                                     'activityName'],

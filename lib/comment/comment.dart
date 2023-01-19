@@ -25,6 +25,7 @@ class Comment extends StatefulWidget {
 class _MyCommentState extends State<Comment> {
   var postData = {};
   var userData = {};
+  var commentData = {};
   var currentUser = {};
   var commentLen = 0;
   bool isLoading = false;
@@ -63,7 +64,7 @@ class _MyCommentState extends State<Comment> {
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get();
 
-      // get post Length
+      // get comment Length
       var commentSnap = await FirebaseFirestore.instance
           .collection('comments')
           .where('postid', isEqualTo: widget.postid['postid'])
@@ -236,7 +237,7 @@ class _MyCommentState extends State<Comment> {
                                                                         context)
                                                                     .size
                                                                     .width *
-                                                                0.7,
+                                                                0.62,
                                                             child: Text(
                                                                 documentSnapshot[
                                                                     'activityName'],
@@ -963,7 +964,7 @@ class _MyCommentState extends State<Comment> {
                         fontSize: 20),
                   )),
                   onTap: () {
-                    Navigator.pop(context);
+                    return showModalBottomSheetRP(context, postData);
                   },
                 ),
               ListTile(
@@ -1040,7 +1041,8 @@ class _MyCommentState extends State<Comment> {
                               ),
                               actions: [
                                 TextButton(
-                                    onPressed: () => Navigator.pop(context),
+                                    onPressed: () => Navigator.of(context)
+                                        .popUntil((route) => route.isFirst),
                                     child: Text('Cancle')),
                                 TextButton(
                                     onPressed: (() {
@@ -1058,7 +1060,8 @@ class _MyCommentState extends State<Comment> {
                                         'timeStamp': timeStamp,
                                         "comment": _commentController.text
                                       }).whenComplete(() {
-                                        Navigator.pop(context);
+                                        Navigator.of(context)
+                                            .popUntil((route) => route.isFirst);
                                       });
                                     }),
                                     child: Text('Save'))
@@ -1097,7 +1100,8 @@ class _MyCommentState extends State<Comment> {
                                           .doc(mytext['cid'])
                                           .delete()
                                           .whenComplete(() {
-                                        Navigator.pop(context);
+                                        Navigator.of(context)
+                                            .popUntil((route) => route.isFirst);
                                       });
                                     }),
                                     child: Text('Delete'))
@@ -1117,7 +1121,8 @@ class _MyCommentState extends State<Comment> {
                         fontSize: 20),
                   )),
                   onTap: () {
-                    //Navigator.pop(context);
+                    return showModalBottomSheetRC(
+                        context, mytext['uid'], mytext);
                   },
                 ),
               ListTile(

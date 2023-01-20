@@ -4,8 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:tangteevs/feed/EditAct.dart';
 import 'package:tangteevs/utils/showSnackbar.dart';
 import 'package:tangteevs/widgets/custom_textfield.dart';
+import 'package:tangteevs/widgets/like.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../HomePage.dart';
+import '../Report.dart';
 import '../comment/comment.dart';
 import '../utils/color.dart';
 import '../services/auth_service.dart';
@@ -132,7 +134,7 @@ class _PostCardState extends State<CardWidget> {
                                     FirebaseAuth.instance.currentUser!.uid)
                                 ? const Icon(
                                     Icons.favorite,
-                                    color: Colors.red,
+                                    color: redColor,
                                     size: 30,
                                   )
                                 : const Icon(
@@ -440,26 +442,5 @@ class _PostCardState extends State<CardWidget> {
         .map((MapEntry<String, String> e) =>
             '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
         .join('&');
-  }
-
-  Future<String> likePost(String postId, String uid, List likes) async {
-    String res = "Some error occurred";
-    try {
-      if (likes.contains(uid)) {
-        // if the likes list contains the user uid, we need to remove it
-        _firestore.collection('post').doc(postId).update({
-          'likes': FieldValue.arrayRemove([uid])
-        });
-      } else {
-        // else we need to add uid to the likes array
-        _firestore.collection('post').doc(postId).update({
-          'likes': FieldValue.arrayUnion([uid])
-        });
-      }
-      res = 'success';
-    } catch (err) {
-      res = err.toString();
-    }
-    return res;
   }
 }

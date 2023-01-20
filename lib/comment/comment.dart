@@ -5,6 +5,7 @@ import 'package:tangteevs/feed/EditAct.dart';
 import 'package:tangteevs/utils/showSnackbar.dart';
 import 'package:tangteevs/widgets/custom_textfield.dart';
 import '../HomePage.dart';
+import '../Report.dart';
 import '../utils/color.dart';
 import '../services/auth_service.dart';
 import 'package:getwidget/getwidget.dart';
@@ -13,6 +14,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'dart:math';
+
+import '../widgets/like.dart';
 
 class Comment extends StatefulWidget {
   DocumentSnapshot postid;
@@ -182,7 +185,7 @@ class _MyCommentState extends State<Comment> {
                                                             .uid)
                                                     ? const Icon(
                                                         Icons.favorite,
-                                                        color: Colors.red,
+                                                        color: redColor,
                                                         size: 30,
                                                       )
                                                     : const Icon(
@@ -1144,26 +1147,5 @@ class _MyCommentState extends State<Comment> {
         );
       },
     );
-  }
-
-  Future<String> likePost(String postId, String uid, List likes) async {
-    String res = "Some error occurred";
-    try {
-      if (likes.contains(uid)) {
-        // if the likes list contains the user uid, we need to remove it
-        _firestore.collection('post').doc(postId).update({
-          'likes': FieldValue.arrayRemove([uid])
-        });
-      } else {
-        // else we need to add uid to the likes array
-        _firestore.collection('post').doc(postId).update({
-          'likes': FieldValue.arrayUnion([uid])
-        });
-      }
-      res = 'success';
-    } catch (err) {
-      res = err.toString();
-    }
-    return res;
   }
 }
